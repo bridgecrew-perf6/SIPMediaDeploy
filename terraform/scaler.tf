@@ -14,11 +14,6 @@ variable "scaler_flavor" {
   description = "The name of the flavor of the scaler instance."
 }
 
-variable "scaler_network" {
-  type        = string
-  description = "The name of the network of the scaler instance."
-}
-
 variable "scaler_os_auth_url" {
   type        = string
   description = "The URL of the Openstack endpoint."
@@ -127,17 +122,17 @@ resource "openstack_compute_instance_v2" "scaler" {
     openstack_metadata_key   = var.scaler_openstack_metadata_key
     openstack_metadata_value = var.scaler_openstack_metadata_value
     openstack_keypair        = var.scaler_openstack_keypair
-    coturn_ip                = openstack_compute_instance_v2.coturn.access_ip_v4
-    coturn_port              = var.coturn_port
-    stun_user                = var.coturn_stun_user
-    stun_pass                = var.coturn_stun_pass
-    kamailio_ip              = openstack_compute_instance_v2.kamailio.access_ip_v4
+    coturn_ip                = openstack_compute_instance_v2.coturn.access_ip_v4,
+    coturn_port              = var.coturn_port,
+    stun_user                = var.coturn_stun_user,
+    stun_pass                = var.coturn_stun_pass,
+    kamailio_ip              = openstack_compute_instance_v2.kamailio.access_ip_v4,
     sip_secret               = var.kamailio_sip_secret
     webrtc_domain            = var.gateway_webrtc_domain
   })
 
   network {
-    name = var.scaler_network
+    name = var.external_network
   }
 
   metadata = {
